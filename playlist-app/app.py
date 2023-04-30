@@ -46,6 +46,9 @@ def show_all_playlists():
 def show_playlist(playlist_id):
     """Show detail on specific playlist."""
 
+    playlist = Playlist.query.get_or_404(playlist_id)
+
+    return render_template('playlist.html', playlist=playlist)
     # ADD THE NECESSARY CODE HERE FOR THIS ROUTE TO WORK
 
 
@@ -56,6 +59,20 @@ def add_playlist():
     - if form not filled out or invalid: show form
     - if valid: add playlist to SQLA and redirect to list-of-playlists
     """
+    form = PlaylistForm()
+
+    if form.validate_on_submit():
+
+        name = form.name.data
+        description = form.description.data
+
+        playlist = Playlist(name=name, description=description)
+
+        db.session.add(playlist)
+        db.session.commit()
+        return redirect('/playlists')
+    else:
+        return render_template('new_playlist.html', form=form)
 
     # ADD THE NECESSARY CODE HERE FOR THIS ROUTE TO WORK
 
@@ -76,6 +93,9 @@ def show_all_songs():
 def show_song(song_id):
     """return a specific song"""
 
+    song = Song.query.get_or_404(song_id)
+
+    return render_template('song.html', song=song)
     # ADD THE NECESSARY CODE HERE FOR THIS ROUTE TO WORK
 
 
@@ -83,10 +103,26 @@ def show_song(song_id):
 def add_song():
     """Handle add-song form:
 
+
+
     - if form not filled out or invalid: show form
     - if valid: add playlist to SQLA and redirect to list-of-songs
     """
 
+    form = SongForm()
+
+    if form.validate_on_submit():
+
+        title = form.title.data
+        artist = form.title.data
+
+        song = Song(title=title, artist=artist)
+
+        db.session.add(song)
+        db.session.commit()
+        return redirect('/songs')
+    else:
+        return render_template('new_song.html', form=form)
     # ADD THE NECESSARY CODE HERE FOR THIS ROUTE TO WORK
 
 
