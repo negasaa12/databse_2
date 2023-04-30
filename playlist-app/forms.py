@@ -3,6 +3,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, BooleanField, IntegerField, SelectField, PasswordField
 from wtforms.validators import InputRequired, Email, Optional, DataRequired, URL
+from models import Song
 
 
 class PlaylistForm(FlaskForm):
@@ -27,3 +28,8 @@ class NewSongForPlaylistForm(FlaskForm):
     """Form for adding a song to playlist."""
 
     song = SelectField('Song To Add', coerce=int)
+
+    def __init__(self, *args, **kwargs):
+        super(NewSongForPlaylistForm, self).__init__(*args, **kwargs)
+        self.song.choices = [(song.id, song.title)
+                             for song in Song.query.all()]
